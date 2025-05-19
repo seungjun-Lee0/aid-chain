@@ -14,6 +14,8 @@
     { "src": "bundle.js", "use": "@vercel/static" }
   ],
   "routes": [
+    { "src": "/js/(.*)", "dest": "/js/$1" },
+    { "src": "/css/(.*)", "dest": "/css/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
   ],
   "github": {
