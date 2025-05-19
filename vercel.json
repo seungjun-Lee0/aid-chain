@@ -1,24 +1,8 @@
 {
   "version": 2,
-  "builds": [
-    { "src": "index.html", "use": "@vercel/static" },
-    { "src": "css/*", "use": "@vercel/static" },
-    { "src": "js/donation.js", "use": "@vercel/static" },
-    { "src": "js/app.js", "use": "@vercel/static" },
-    { "src": "js/wallet.js", "use": "@vercel/static" },
-    { "src": "js/ui.js", "use": "@vercel/static" },
-    { "src": "js/tracking.js", "use": "@vercel/static" },
-    { "src": "js/registration.js", "use": "@vercel/static" },
-    { "src": "js/contracts.js", "use": "@vercel/static" },
-    { "src": "js/assignment.js", "use": "@vercel/static" },
-    { "src": "bundle.js", "use": "@vercel/static" }
-  ],
   "routes": [
     { "src": "/js/(.*)", "dest": "/js/$1" },
     { "src": "/css/(.*)", "dest": "/css/$1" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "github": {
-    "enabled": false
-  }
+  ]
 }
