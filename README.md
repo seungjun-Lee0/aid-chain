@@ -25,7 +25,7 @@ The project consists of three main smart contracts:
 ## Technical Stack
 
 - **Blockchain**: Ethereum
-- **Smart Contract Language**: Solidity 0.8.x
+- **Smart Contract Language**: Solidity 0.8.2
 - **Development Framework**: Hardhat
 - **Frontend**: HTML, CSS, JavaScript
 - **Web3 Integration**: Web3.js

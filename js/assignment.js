@@ -1,4 +1,4 @@
-//Assign recipients to token
+// Assign recipients to token
 async function assignRecipients() {
     try {
         if (!window.app.aidTokenContract) {
@@ -59,9 +59,7 @@ async function assignRecipients() {
     }
 }
 
-/**
- * Check assignment status
- */
+// Check assignment status
 async function checkAssignment() {
     try {
         if (!window.app.aidTokenContract) {
@@ -128,9 +126,7 @@ async function checkAssignment() {
     }
 }
 
-/**
- * Load Pending Assignment Tokens
- */
+// Load Pending Assignment Tokens
 async function loadPendingAssignmentTokens() {
     try {
         if (!window.app.aidTokenContract) {
@@ -200,9 +196,7 @@ async function loadPendingAssignmentTokens() {
     }
 }
 
-/**
- * Display filtered assignment tokens
- */
+// Display filtered assignment tokens
 function displayFilteredAssignmentTokens() {
     const tokenList = document.getElementById('assignmentTokenList');
     tokenList.innerHTML = '';
@@ -239,9 +233,7 @@ function displayFilteredAssignmentTokens() {
     }
 }
 
-/**
- * Create an assignment token card
- */
+// Create an assignment token card
 function createAssignmentTokenCard(tokenData, container) {
     const tokenCard = document.createElement('div');
     tokenCard.className = 'col-md-3 mb-3';
@@ -267,17 +259,13 @@ function createAssignmentTokenCard(tokenData, container) {
     container.appendChild(tokenCard);
 }
 
-/**
- * Load more assignment tokens
- */
+// Load more assignment tokens
 function loadMoreAssignmentTokens() {
     window.app.visibleAssignmentTokenCount += 8;
     displayFilteredAssignmentTokens();
 }
 
-/**
- * Select assignment token
- */
+// Select assignment token
 function selectAssignmentToken(tokenId) {
     // Remove selected class from all tokens
     const allTokenCards = document.querySelectorAll('#assignmentTokenList .card');
@@ -311,9 +299,7 @@ function selectAssignmentToken(tokenId) {
     loadExistingAssignment(tokenId);
 }
 
-/**
- * Load existing assignment for a token
- */
+// Load existing assignment for a token
 async function loadExistingAssignment(tokenId) {
     try {
         // Clear form first
@@ -430,9 +416,7 @@ async function loadExistingAssignment(tokenId) {
     }
 }
 
-/**
- * Cancel assignment
- */
+// Cancel assignment
 function cancelAssignment() {
     // Hide assignment form
     document.getElementById('assignmentFormContainer').style.display = 'none';
