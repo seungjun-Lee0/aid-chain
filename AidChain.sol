@@ -22,16 +22,16 @@ contract DIDRegistry {
     //recipients function in the AidToken contract. I feel like adding this will make testing
     //a nightmare though.
 
-    // Added: Store the relief agency address for access control
+    //  Store the relief agency address for access control
     address public reliefAgency;
 
-    // Added: Constructor to set the relief agency address when deploying
+    //  Constructor to set the relief agency address when deploying
     constructor(address _reliefAgency) {
         require(_reliefAgency != address(0), "Invalid relief agency address");
         reliefAgency = _reliefAgency;
     }
 
-    // Added: Modifier to restrict access to relief agency only
+    //  Modifier to restrict access to relief agency only
     modifier onlyReliefAgency() {
         require(
             msg.sender == reliefAgency,
@@ -67,7 +67,7 @@ contract DIDRegistry {
     address[] public groundReliefAddresses;
     address[] public recipientAddresses;
 
-    //Added: Event to track role registrations
+    // Event to track role registrations
     event RoleRegistered(address indexed user, Role role, string location);
 
     //Internal registration function that assigns role-based DID automatically
@@ -126,11 +126,11 @@ contract DIDRegistry {
             recipientAddresses.push(user);
         }
 
-        // Added: Emit event when a role is registered
+        //  Emit event when a role is registered
         emit RoleRegistered(user, _role, _location);
     }
 
-    // Modified: Added onlyReliefAgency modifier to restrict who can register transporters
+    //  Added onlyReliefAgency modifier to restrict who can register transporters
     function registerTransporterDID(
         address user,
         string memory location
@@ -138,7 +138,7 @@ contract DIDRegistry {
         internalRegisterDID(user, "transporter-", Role.Transporter, location);
     }
 
-    // Modified: Added onlyReliefAgency modifier to restrict who can register ground relief
+    //  Added onlyReliefAgency modifier to restrict who can register ground relief
     function registerGroundReliefDID(
         address user,
         string memory location
@@ -146,7 +146,7 @@ contract DIDRegistry {
         internalRegisterDID(user, "groundrelief-", Role.GroundRelief, location);
     }
 
-    // Modified: Added onlyReliefAgency modifier to restrict who can register recipients
+    //  Added onlyReliefAgency modifier to restrict who can register recipients
     function registerRecipientDID(
         address user,
         string memory location
@@ -222,7 +222,7 @@ contract DIDRegistry {
         return recipientAddresses;
     }
 
-    // Added: Function to transfer relief agency role to a new address
+    //  Function to transfer relief agency role to a new address
     // This allows for administrative changes if needed
     function transferReliefAgency(
         address newReliefAgency
@@ -305,13 +305,13 @@ contract AidToken {
     //Tracks the total amount of donations for the currently active token
     uint256 public currentTokenBalance;
 
-    //Added: Maximum number of tokens that can be processed in a single transaction to prevent gas limit issues
+    // Maximum number of tokens that can be processed in a single transaction to prevent gas limit issues
     uint256 public constant MAX_TOKENS_PER_TRANSACTION = 5;
 
-    //Added: Event for tracking donations
+    // Event for tracking donations
     event Donation(address indexed donor, uint256 amount, uint256 tokenId);
 
-    //Added: Event for tracking role assignments to tokens
+    // Event for tracking role assignments to tokens
     event AidTokenAssigned(
         uint256 indexed tokenId,
         address transferTeam,
@@ -365,7 +365,7 @@ contract AidToken {
         _;
     }
 
-    //Modified: Optimized donate function to limit gas usage
+    // Optimized donate function to limit gas usage
     function donate() external payable {
         // Donation must be higher than 0.013 eth ($20 usd)
         require(msg.value >= minDonation, "Donation must be at least $20");
@@ -379,14 +379,14 @@ contract AidToken {
         // This tracks how much of the donation still needs to be processed after each loop iteration.
         uint256 remaining = msg.value;
 
-        // Added: Counter to limit the number of token creations in a single transaction
+        //  Counter to limit the number of token creations in a single transaction
         uint256 tokenCount = 0;
 
         // This loop allows one donation to potentially fund multiple aid tokens.
         // It continues until the entire donated value (`remaining`) has been assigned to tokens
         // or until we've reached the maximum number of tokens per transaction.
         while (remaining > 0 && tokenCount < MAX_TOKENS_PER_TRANSACTION) {
-            // Added: Increment token counter
+            //  Increment token counter
             tokenCount++;
 
             // Calculate how much more Ether is needed to complete the current token.
@@ -408,7 +408,7 @@ contract AidToken {
                 // Subtract the used amount from the remaining unallocated funds.
                 remaining -= spaceLeft;
 
-                // Added: Emit donation event
+                //  Emit donation event
                 emit Donation(msg.sender, spaceLeft, tokenIdCounter);
 
                 // At this point, the token has reached its threshold and is ready to be issued.
@@ -431,7 +431,7 @@ contract AidToken {
                 // Update the token's balance with what remains.
                 currentTokenBalance += remaining;
 
-                // Added: Emit donation event for partial token funding
+                //  Emit donation event for partial token funding
                 emit Donation(msg.sender, remaining, tokenIdCounter);
 
                 // Since all donated funds have been assigned to tokens, end the loop.
@@ -439,7 +439,7 @@ contract AidToken {
             }
         }
 
-        // Added: If we still have remaining funds to process but hit the token limit,
+        //  If we still have remaining funds to process but hit the token limit,
         // the funds are still stored in donorBalances for future donations
     }
 
@@ -553,7 +553,7 @@ contract AidToken {
 
         aidTokens[tokenId].location = location;
 
-        // Added: Emit event when recipients are assigned to a token
+        //  Emit event when recipients are assigned to a token
         emit AidTokenAssigned(
             tokenId,
             transferAddress,
@@ -645,7 +645,7 @@ contract AidTokenHandler {
     //and the new status. Useful for auditing and tracking purposes on-chain.
     event AidTransferred(uint256 tokenId, address actor, AidStatus newStatus);
 
-    //Added: Event for tracking token status initialization
+    // Event for tracking token status initialization
     event TokenStatusInitialized(uint256 indexed tokenId);
 
     //Constructor that runs once when the AidTokenHandler contract is deployed
@@ -666,7 +666,7 @@ contract AidTokenHandler {
         //AidToken contract as the specificed address of that contract
     }
 
-    // Added: Function to explicitly initialize a token's status to Issued
+    //  Function to explicitly initialize a token's status to Issued
     // This adds clarity and ensures proper state initialization rather than relying on default values
     // Can be called by anyone, but only works for tokens that have been issued and not yet initialized
     function initializeTokenStatus(uint256 tokenId) public {
@@ -690,7 +690,7 @@ contract AidTokenHandler {
         emit TokenStatusInitialized(tokenId);
     }
 
-    // Added: Batch token status query function
+    //  Batch token status query function
     // This allows frontend applications to efficiently retrieve the status of multiple tokens
     // in a single call, reducing the number of RPC requests needed
     function getTokenStatusBatch(
